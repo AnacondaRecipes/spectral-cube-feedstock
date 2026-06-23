@@ -1,13 +1,23 @@
 {% set name = "spectral-cube" %}
-{% set version = "0.6.6" %}
+{% set version = "0.6.7" %}
+{% set tests_to_skip = "test_save_to_tmp_dir" %}
+{% set tests_to_skip = tests_to_skip + " or test_cube_wcs_freqtovel" %}
+{% set tests_to_skip = tests_to_skip + " or test_smooth_update_function_parallel" %}
+{% set tests_to_skip = 'tests_to_skip + " or test_minimal_subcube[False]"' %}
+{% set tests_to_skip = tests_to_skip + " or test_dask_distributed" %}
 
+# KeyError: '>f8'
+# AssertionError: Aassert np.float64(305.2461585938677) == 305.2461585938794
+# AssertionError: assert '' == 'Update Funct...nction Call\n'
+# TypeError: 'numpy.bool' object cannot be interpreted as an integer
+# Failed: 2 thread(s) were leaked
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name | replace('-', '_') }}-{{ version }}.tar.gz
-  sha256: 6e306086be56adf0b8347e5cca2cbd4548829894941c1b720fad5b7758bfe243
+  sha256: 6e2c08558697fce837edd0073f475360fac1460074ea359a96ce0b2e6de675e4
 
 build:
   number: 0
@@ -34,17 +44,6 @@ requirements:
   run_constrained:
     - zarr <3.0.0
     - reproject >=0.9.1
-
-# KeyError: '>f8'
-{% set tests_to_skip = "test_save_to_tmp_dir" %}
-# AssertionError: Aassert np.float64(305.2461585938677) == 305.2461585938794
-{% set tests_to_skip = tests_to_skip + " or test_cube_wcs_freqtovel" %}
-# AssertionError: assert '' == 'Update Funct...nction Call\n'
-{% set tests_to_skip = tests_to_skip + " or test_smooth_update_function_parallel" %}
-# TypeError: 'numpy.bool' object cannot be interpreted as an integer
-{% set tests_to_skip = tests_to_skip + " or test_minimal_subcube[False]" %}
-# Failed: 2 thread(s) were leaked
-{% set tests_to_skip = tests_to_skip + " or test_dask_distributed" %}
 
 test:
   imports:
